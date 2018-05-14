@@ -4,8 +4,10 @@ package aQute.jpm.platform;
  * http://support.microsoft.com/kb/814596
  */
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -173,7 +175,13 @@ public class Windows extends Platform {
 				);
 			}
 		}
-		logger.debug("Ini content {}", IO.collect(ini));
+
+		try (InputStreamReader reader = new InputStreamReader(new FileInputStream(ini))) {
+			String encoding = reader.getEncoding();
+
+			logger.debug("Ini content {}", IO.collect(ini, encoding));
+		}
+
 		return null;
 	}
 
