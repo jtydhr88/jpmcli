@@ -507,11 +507,23 @@ public class Main extends ReporterAdapter {
 						String cmdJvmLocation = cmd.jvmLocation;
 
 						for (JVM vm : vms) {
-							if (jpmJvmLocation != null && jpmJvmLocation.startsWith(vm.path)) {
-								cmd.jvmLocation = vm.path;
+							String vmPath = vm.path;
+
+							vmPath = vmPath.replaceAll("\\\\", "/");
+
+							if (jpmJvmLocation != null) {
+								jpmJvmLocation = jpmJvmLocation.replaceAll("\\\\", "/");
+
+								if (jpmJvmLocation.startsWith(vmPath)){
+									cmd.jvmLocation = vm.path;
+								}
 							}
-							else if (cmdJvmLocation != null && cmdJvmLocation.startsWith(vm.path)) {
-								cmd.jvmLocation = vm.path;
+							else if (cmdJvmLocation != null) {
+								cmdJvmLocation = cmdJvmLocation.replaceAll("\\\\", "/");
+
+								if (cmdJvmLocation.startsWith(vmPath)){
+									cmd.jvmLocation = vm.path;
+								}
 							}
 						}
 
